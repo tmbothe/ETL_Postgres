@@ -35,7 +35,7 @@ For this project, we will building a star model with fact and dimension tables. 
 **Dimension Tables**
 
     2 - users - users in the app
-         user_id, first_name, last_name, gender, level </br>
+         user_id, first_name, last_name, gender, level 
     3 - songs - songs in music database
          song_id, title, artist_id, year, duration
     4- artists - artists in music database
