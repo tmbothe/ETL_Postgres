@@ -42,6 +42,8 @@ For this project, we will building a star model with fact and dimension tables. 
         artist_id, name, location, latitude, longitude
     5- time - timestamps of records in songplays broken down into specific units
         start_time, hour, day, week, month, year, weekday
+        
+ ![image](images/datamodel.png)
 
 
 
