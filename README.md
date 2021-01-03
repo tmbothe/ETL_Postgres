@@ -11,6 +11,7 @@ There are two sources of dataset, the **Song Dataset** and the **Log Dataset** .
 This is a collection of JSON data that store songs data. The files are partitioned by the three letters of of each song's track ID. These are two examples:
  - **song_data/A/B/C/TRABCEI128F424C983.json**
  - **song_data/A/A/B/TRAABJL12903CDCF1A.json**
+ 
  Each file is structured as:
  {"num_songs": 1, "artist_id": "ARJIE2Y1187B994AB7", "artist_latitude": null, "artist_longitude": null, "artist_location": "", "artist_name": "Line Renaud", "song_id": "SOUPIRU12A6D4FA1E1", "title": "Der Kleine Dompfaff", "duration": 152.92036, "year": 0}
 
