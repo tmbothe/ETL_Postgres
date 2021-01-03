@@ -7,37 +7,44 @@ from sql_queries import *
 
 def process_song_file(cur, filepath):
     # open song file
-    df = 
+    df = pd.read_json(filepath,lines=True) 
 
     # insert song record
-    song_data = 
+    song_data = df[['song_id','title','artist_id','year','duration']].values[0].tolist()
     cur.execute(song_table_insert, song_data)
     
     # insert artist record
-    artist_data = 
+    artist_data = df[['artist_id', 'artist_name', 'artist_location', 'artist_latitude','artist_longitude']].values[0].tolist()
     cur.execute(artist_table_insert, artist_data)
 
 
 def process_log_file(cur, filepath):
     # open log file
-    df = 
+    df =  pd.read_json(filepath,lines=True) 
 
     # filter by NextSong action
-    df = 
+    df['dtime']=pd.to_datetime(df.ts).dt.time
 
     # convert timestamp column to datetime
-    t = 
+    t = pd.DataFrame(pd.to_datetime(df.ts))
+    t['timestamp'] = t.ts.dt.time
+    t['hour']  = t.ts.dt.hour
+    t['day']   = t.ts.dt.day
+    t['week']  = t.ts.dt.week
+    t['month'] = t.ts.dt.month
+    t['year']  = t.ts.dt.year
+    t['weekday'] = t.ts.dt.weekday
     
     # insert time data records
-    time_data = 
-    column_labels = 
-    time_df = 
+    #time_data = t.v
+    #column_labels = 
+    time_df = t.iloc[:,1:]
 
     for i, row in time_df.iterrows():
         cur.execute(time_table_insert, list(row))
 
     # load user table
-    user_df = 
+    user_df = df[['userId','firstName','lastName','gender','level']]
 
     # insert user records
     for i, row in user_df.iterrows():
@@ -54,9 +61,10 @@ def process_log_file(cur, filepath):
             songid, artistid = results
         else:
             songid, artistid = None, None
-
+        
+        start_time = row.dtime
         # insert songplay record
-        songplay_data = 
+        songplay_data = (start_time,row.userId,row.level,songid,artistid,row.sessionId,row.location,row.userAgent)
         cur.execute(songplay_table_insert, songplay_data)
 
 
@@ -71,6 +79,8 @@ def process_data(cur, conn, filepath, func):
     # get total number of files found
     num_files = len(all_files)
     print('{} files found in {}'.format(num_files, filepath))
+    
+    #print(f"The function is {func} the path is {filepath},the current is {cur}=====>")
 
     # iterate over files and process
     for i, datafile in enumerate(all_files, 1):
