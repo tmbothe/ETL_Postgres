@@ -43,7 +43,7 @@ For this project, we will building a star model with fact and dimension tables. 
     5- time - timestamps of records in songplays broken down into specific units
         start_time, hour, day, week, month, year, weekday
         
- ![image](./ETL_Postgres/images/datamodel.PNG)
+ ![image](https://github.com/tmbothe/ETL_Postgres/blob/main/images/datamodel.PNG)
 
 
 
