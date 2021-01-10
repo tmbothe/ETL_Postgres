@@ -53,7 +53,7 @@ def process_log_file(cur, filepath):
     # insert time data records
     #time_data = t.v
     #column_labels = 
-    time_df = t.iloc[:,1:].drop_duplicates(subset=['timestamp'],keep=False)
+    time_df = t.iloc[:,1:].drop_duplicates()
 
     for i, row in time_df.iterrows():
         cur.execute(time_table_insert, list(row))
@@ -84,7 +84,8 @@ def process_log_file(cur, filepath):
         start_time = row.dtime
         # insert songplay record
         songplay_data = (start_time,row.userId,row.level,songid,artistid,row.sessionId,row.location,row.userAgent)
-        cur.execute(songplay_table_insert, songplay_data)
+        if len(str(row.userId))>0:
+            cur.execute(songplay_table_insert, songplay_data)
 
 
 def process_data(cur, conn, filepath, func):

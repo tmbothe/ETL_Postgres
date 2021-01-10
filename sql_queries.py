@@ -12,31 +12,34 @@ songplay_table_create = ("""
 CREATE TABLE IF NOT EXISTS songplays(
  songplay_id serial not null primary key,
  start_time time not null,
- user_id varchar not null,
- level varchar not null,
- song_id varchar not null,
- artist_id varchar not null,
+ user_id varchar(25) not null,
+ level varchar(10) not null,
+ song_id varchar(20) not null,
+ artist_id varchar(20) not null,
  session_id int not null,
- location varchar ,
- user_agent varchar 
- )
+ location varchar(300) ,
+ user_agent varchar(300),
+ CONSTRAINT  fk_start_time FOREIGN KEY(start_time) REFERENCES time(start_time), 
+ CONSTRAINT  fk_user_id FOREIGN    KEY(user_id)    REFERENCES users(user_id), 
+ CONSTRAINT  fk_artist_id FOREIGN  KEY(artist_id)  REFERENCES artists(artist_id)
+ );
 """)
 
 user_table_create = ("""
  CREATE TABLE IF NOT EXISTS users (
-  user_id varchar not null  primary key,
-  first_name varchar ,
-  last_name varchar not null,
-  gender varchar not null,
-  level varchar not null
+  user_id varchar(20) not null  primary key,
+  first_name varchar(30) ,
+  last_name varchar(30) not null,
+  gender varchar(5) not null,
+  level varchar(10) not null
  )
 """)
 
 song_table_create = ("""
 CREATE TABLE IF NOT EXISTS songs (
- song_id varchar not null  primary key,
- title varchar not null,
- artist_id varchar not null,
+ song_id varchar(20) not null  primary key,
+ title varchar(100) not null,
+ artist_id varchar(20) not null,
  year int not null,
  duration float not null
 )
@@ -44,9 +47,9 @@ CREATE TABLE IF NOT EXISTS songs (
 
 artist_table_create = ("""
 CREATE TABLE IF NOT EXISTS artists(
- artist_id varchar not null  primary key,
- name varchar not null,
- location varchar,
+ artist_id varchar(20) not null  primary key,
+ name varchar(150) not null,
+ location varchar(300),
  latitude float not null,
  longitude float not null
 )
@@ -56,11 +59,11 @@ time_table_create = ("""
 CREATE TABLE IF NOT EXISTS time(
  start_time time not null  primary key,
  hour int not null,
- day varchar not null,
+ day varchar(20) not null,
  week int not null, 
  month int not null,
  year int not null,
- weekday varchar not null
+ weekday varchar(20) not null
 )
 """)
 
@@ -75,7 +78,7 @@ ON CONFLICT(song_id) DO NOTHING;
 user_table_insert = ("""
 INSERT INTO users( user_id,first_name, last_name, gender,level)
 VALUES(%s,%s,%s,%s,%s)
-ON CONFLICT(user_id) DO NOTHING;
+ON CONFLICT(user_id) DO UPDATE SET level = EXCLUDED.level;
 """)
 
 song_table_insert = ("""
@@ -99,6 +102,7 @@ VALUES (%s,%s,%s,%s,%s,%s,%s)
 songplay_table_insert = ("""
 INSERT INTO songplays (start_time,user_id,level,song_id,artist_id,session_id,location,user_agent)
 VALUES(%s,%s,%s,%s,%s,%s,%s,%s)
+
 """)
 # FIND SONGS
 
@@ -111,5 +115,5 @@ INNER JOIN songs s ON a.artist_id = s.artist_id
 
 # QUERY LISTS
 
-create_table_queries = [songplay_table_create, user_table_create, song_table_create, artist_table_create, time_table_create]
+create_table_queries = [user_table_create, song_table_create, artist_table_create, time_table_create,songplay_table_create]
 drop_table_queries = [songplay_table_drop, user_table_drop, song_table_drop, artist_table_drop, time_table_drop]
