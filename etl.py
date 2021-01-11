@@ -16,8 +16,9 @@ def process_song_file(cur, filepath):
     df = pd.read_json(filepath,lines=True) 
       
     # insert song record
-    song_data = df[['song_id','title','artist_id','year','duration']].drop_duplicates(subset=['song_id']).values[0].tolist()
-    cur.execute(song_table_insert, song_data)
+    song_data = df[['song_id','title','artist_id','year','duration']].drop_duplicates(subset=['song_id']).dropna(subset=['song_id']).values[0].tolist()
+    if len(song_data[0])>0:
+        cur.execute(song_table_insert, song_data)
     
     # insert artist record
     artist_data = df[['artist_id', 'artist_name', 'artist_location', 'artist_latitude','artist_longitude']].drop_duplicates(subset=['artist_id']).values[0].tolist()

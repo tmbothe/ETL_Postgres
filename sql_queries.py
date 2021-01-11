@@ -14,14 +14,13 @@ CREATE TABLE IF NOT EXISTS songplays(
  start_time time not null,
  user_id varchar(25) not null,
  level varchar(10) not null,
- song_id varchar(20) not null,
- artist_id varchar(20) not null,
+ song_id varchar(20)  null,
+ artist_id varchar(20) null,
  session_id int not null,
  location varchar(300) ,
  user_agent varchar(300),
  CONSTRAINT  fk_start_time FOREIGN KEY(start_time) REFERENCES time(start_time), 
- CONSTRAINT  fk_user_id FOREIGN    KEY(user_id)    REFERENCES users(user_id), 
- CONSTRAINT  fk_artist_id FOREIGN  KEY(artist_id)  REFERENCES artists(artist_id)
+ CONSTRAINT  fk_user_id FOREIGN    KEY(user_id)    REFERENCES users(user_id)
  );
 """)
 
@@ -110,6 +109,7 @@ song_select = ("""
 SELECT s.song_id,a.artist_id
 FROM artists a
 INNER JOIN songs s ON a.artist_id = s.artist_id
+WHERE s.title =%s AND a.name = %s AND s.duration = %s
 """)
 
 
